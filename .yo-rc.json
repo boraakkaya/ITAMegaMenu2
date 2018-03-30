@@ -1,0 +1,8 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "version": "1.4.0",
+    "libraryName": "ita-global-navigation-v-2",
+    "libraryId": "c6babe51-de40-41d0-9a3c-6ae8177f27c8",
+    "environment": "spo"
+  }
+}

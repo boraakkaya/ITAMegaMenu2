@@ -1,0 +1,18 @@
+{
+  "$schema": "https://dev.office.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "ita-global-navigation-v-2-application-customizer": {
+      "components": [
+        {
+          "entrypoint": "./lib/extensions/itaGlobalNavigationV2/ItaGlobalNavigationV2ApplicationCustomizer.js",
+          "manifest": "./src/extensions/itaGlobalNavigationV2/ItaGlobalNavigationV2ApplicationCustomizer.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "ItaGlobalNavigationV2ApplicationCustomizerStrings": "lib/extensions/itaGlobalNavigationV2/loc/{locale}.js"
+  }
+}

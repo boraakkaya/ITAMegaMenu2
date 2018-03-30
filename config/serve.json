@@ -1,0 +1,29 @@
+{
+  "$schema": "https://dev.office.com/json-schemas/core-build/serve.schema.json",
+  "port": 4321,
+  "https": true,
+  "serveConfigurations": {
+    "default": {
+      "pageUrl": "https://itadev.sharepoint.com/SitePages/Nav-Demo.aspx",
+      "customActions": {
+        "97cf6349-5cb3-4cb1-8567-41401ced85d4": {
+          "location": "ClientSideExtension.ApplicationCustomizer",
+          "properties": {
+            "testMessage": "Test message"
+          }
+        }
+      }
+    },
+    "itaGlobalNavigationV2": {
+      "pageUrl": "https://itadev.sharepoint.com/SitePages/Nav-Demo.aspx",
+      "customActions": {
+        "97cf6349-5cb3-4cb1-8567-41401ced85d4": {
+          "location": "ClientSideExtension.ApplicationCustomizer",
+          "properties": {
+            "testMessage": "Test message"
+          }
+        }
+      }
+    }
+  }
+}
