@@ -6,6 +6,8 @@ import {
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import GlobalMenu from './../../components/GlobalMenu';
+import {IMyTeam} from './../../interfaces';
+import { getMyTeams } from '../../data';
 export interface IItaGlobalNavigationV2ApplicationCustomizerProperties {
   
 }
@@ -15,9 +17,15 @@ export default class ItaGlobalNavigationV2ApplicationCustomizer
     private _topPlaceholder: PlaceholderContent | undefined;
     private _bottomPlaceholder: PlaceholderContent | undefined;
     @override
-    public onInit(): Promise<void> {
-      this._renderPlaceHolders();
-      return Promise.resolve<void>();
+    public async onInit(): Promise<void> {
+      await getMyTeams(this.context).then((myteams:Array<IMyTeam>)=>{
+        console.log("Promise Return ", myteams);
+        this._renderPlaceHolders();
+        return Promise.resolve<void>();
+      }).catch((error)=>{
+        console.log("Error occured ", error);
+        return Promise.resolve<void>();
+      })
     }
     private _renderPlaceHolders(): void {
       // Handling the top placeholder
