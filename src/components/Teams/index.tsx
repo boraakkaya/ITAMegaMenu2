@@ -1,5 +1,5 @@
 import * as React from 'react';
-import MyTeams from './MyTeams';
+import RecentSites from './RecentSites';
 
 export interface TeamsProps {};
 export interface TeamsState {};
@@ -9,9 +9,8 @@ class Teams extends React.Component<TeamsProps, TeamsState> {
         return (<div>
             <div className="ms-Grid">
                 <div className="ms-Grid-row" >
-                    <div className={`ms-Grid-col ms-sm12 ms-lg4`}>
-                    <h1>MY TEAMS</h1>
-                    <MyTeams />
+                    <div className={`ms-Grid-col ms-sm12 ms-lg4`}>                    
+                    <RecentSites />
                     </div>
                     <div className={`ms-Grid-col ms-sm12 ms-lg4`}>
                     <h1>KNOWLEDGE IPSUM</h1>

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {autobind} from 'office-ui-fabric-react';
+import * as moment from 'moment';
 import styles from '../Styles/main.module.scss';
 import Flyout from './../Flyout';
 import {MockOffices} from './../../data/mock';
@@ -16,18 +17,58 @@ class GlobalMenu extends React.Component<GlobalMenuProps, GlobalMenuState> {
         super(props);
         this.state = {currentMenu:"Home"};
     }
-    handleSharePointHomeLoaded()
+    handleSharePointHomeLoaded(target)
     {
-        //localStorage["ms-oil-datasource-RecentSites"] = sessionStorage["ms-oil-datasource-RecentSites"];
-        localStorage["globalNavigationLoggedInUser"] = `{RecentSites:${JSON.parse(sessionStorage["ms-oil-datasource-RecentSites"]).Acronyms._value},Suggested:${JSON.parse(sessionStorage["ms-oil-datasource-Suggested"]).Acronyms._value},FavoriteFeed:${JSON.parse(sessionStorage["ms-oil-datasource-FavoriteFeed"]).Acronyms._value}}`;        
-        //ms-oil-datasource-RecentSites
-        //ms-oil-datasource-Suggested
-        //ms-oil-datasource-FavoriteFeed
-        console.log("User : ",JSON.parse(localStorage["globalNavigationLoggedInUser"]));
+        console.log("RecentSites : ",sessionStorage["ms-oil-datasource-RecentSites"]);
+        var recentSites = JSON.parse(sessionStorage["ms-oil-datasource-RecentSites"]);
+        var recentSitesData = recentSites[Object.keys(recentSites)[0]];
+        console.log(recentSitesData);
+
+        console.log("Suggested Sites : ",sessionStorage["ms-oil-datasource-Suggested"]);
+        var suggestedSites = JSON.parse(sessionStorage["ms-oil-datasource-Suggested"]);
+        var suggestedSitesData = suggestedSites[Object.keys(suggestedSites)[0]];
+        console.log(suggestedSitesData);
+
+        console.log("FavoriteFeed : ",sessionStorage["ms-oil-datasource-FavoriteFeed"]);
+        var favoriteFeed = JSON.parse(sessionStorage["ms-oil-datasource-FavoriteFeed"]);
+        var favoriteFeedData = favoriteFeed[Object.keys(favoriteFeed)[0]];
+        console.log(favoriteFeedData);
+
+       var globalNavigationLoggedInUser  = {"recentSites":recentSitesData,"suggestedSites": suggestedSitesData,"favoriteFeed":favoriteFeedData};
+
+        //Use below instead since it provides more information related to user
+        
+        var _spHomePageDataCache = target.contentWindow._spHomePageDataCache; // Global window object retrieved from Layouts/Sharepoint.aspx page
+        var expires = moment().add(45,'m');
+        var cacheData = {"data":_spHomePageDataCache,"expires": expires};
+        localStorage["globalNavigationLoggedInUser"] =JSON.stringify(cacheData);
+        
+        console.log("_spHomePageDataCache", JSON.parse(localStorage["globalNavigationLoggedInUser"]));
+
+        //  use cacheData after parsed as below sample
+         var cacheDataJSON = JSON.parse(localStorage["globalNavigationLoggedInUser"]);
+         console.log("All Activities Value :", JSON.parse(cacheDataJSON.data["SPHomeWeb:activities"].cacheValue));
+         console.log("All Sites Value :", JSON.parse(cacheDataJSON.data["SPHomeWeb:sites/feed"].cacheValue));
+         console.log("Recent Sites Value :", JSON.parse(cacheDataJSON.data["SPHomeWeb:sites/recent"].cacheValue));
+         console.log("Suggested Sites Value :", JSON.parse(cacheDataJSON.data["SPHomeWeb:sites/suggested"].cacheValue));
     }
     public render(): JSX.Element {
+        var y = moment();
+        var x = moment();
+        var hasExpired = false;        
+        if(localStorage["globalNavigationLoggedInUser"]!=undefined)
+        {
+            y = moment(JSON.parse(localStorage["globalNavigationLoggedInUser"]).expires);
+            hasExpired = x.valueOf() > y.valueOf() ? true : false;
+        }
+        console.log("Has Exoied ? : ", hasExpired);
+
+  var duration = moment.duration(x.diff(y))
         return (<div className={styles.wrapper}>
-        {localStorage["globalNavigationLoggedInUser"] == undefined && <iframe src="https://itadev.sharepoint.com/_layouts/15/sharepoint.aspx" onLoad={()=>{this.handleSharePointHomeLoaded()}} /> }
+        {localStorage["globalNavigationLoggedInUser"] == undefined && <iframe src="https://itadev.sharepoint.com/_layouts/15/sharepoint.aspx" onLoad={(e)=>{this.handleSharePointHomeLoaded(e.currentTarget)}} /> }
+
+        {localStorage["globalNavigationLoggedInUser"] != undefined && hasExpired && <iframe src="https://itadev.sharepoint.com/_layouts/15/sharepoint.aspx" onLoad={(e)=>{this.handleSharePointHomeLoaded(e.currentTarget)}} /> }
+
           <div className={styles.toplevelmenu}>
             <div className={styles.menutext} onMouseOver={()=>{this.setState({currentMenu:"Home"})}}>Home</div>            
             <div className={styles.menutext} onMouseOver={()=>{this.setState({currentMenu:"Offices"})}} style={{backgroundColor:this.state.currentMenu =="Offices" ? "#eee":"#ddd"}}>Offices</div>
