@@ -1,8 +1,10 @@
 import * as React from 'react';
-import { ISiteItem } from '../../interfaces';
+import { ISiteItem, IActivity } from '../../interfaces';
+import Activity from './Activity';
 
 export interface SiteCardProps {
-    siteItem:ISiteItem
+    siteItem:ISiteItem,
+    relatedActivities:Array<IActivity>
 };
 export interface SiteCardState {};
 
@@ -15,7 +17,10 @@ class SiteCard extends React.Component<SiteCardProps, SiteCardState> {
             <a href={this.props.siteItem.Url}>{this.props.siteItem.Title}</a>
             </div>
             <div className="activitybox">
-            Activities
+            {this.props.relatedActivities.map((activity,index)=>{
+                return <Activity activity={activity} />
+
+            })}
             </div>
 
         </div>);

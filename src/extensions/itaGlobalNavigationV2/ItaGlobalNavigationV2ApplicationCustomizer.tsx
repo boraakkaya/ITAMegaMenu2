@@ -18,8 +18,8 @@ export default class ItaGlobalNavigationV2ApplicationCustomizer
     private _bottomPlaceholder: PlaceholderContent | undefined;
     @override
     public async onInit(): Promise<void> {
-      await getMyTeams(this.context).then((myteams:Array<IMyTeam>)=>{
-        console.log("Promise Return ", myteams);
+      await getMyTeams(this.context).then(async(myteams:Array<IMyTeam>)=>{
+        console.log("getMyTeams Result :", myteams);
         this._renderPlaceHolders();
         return Promise.resolve<void>();
       }).catch((error)=>{

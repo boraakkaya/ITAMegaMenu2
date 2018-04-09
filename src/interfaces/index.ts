@@ -23,3 +23,13 @@ Type:string,
 Url:string,
 WebTemplate:string
 }
+export enum ActivityType{
+    YouViewedActivity =  "YouViewedActivity",
+    YouModifiedActivity = "YouModifiedActivity"
+}
+export interface IActivity
+{
+    Type:ActivityType,
+    Time:string,
+    ActivityItem: {Title:string, Url:string}
+}

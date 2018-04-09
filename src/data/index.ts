@@ -1,6 +1,7 @@
 import { IMyTeam } from "../interfaces";
 import { ApplicationCustomizerContext } from "@microsoft/sp-application-base";
 import {SPHttpClient, GraphHttpClient, HttpClient} from "@microsoft/sp-http";
+import * as moment from 'moment';
 
 export async function getMyTeams(ctx:ApplicationCustomizerContext):Promise<Array<IMyTeam>>
 {    
@@ -48,4 +49,26 @@ export async function getGroupSites(ctx:ApplicationCustomizerContext):Promise<Ar
 
     return groupSitesArray;
 
+}
+
+//this function is not used since we grab Followed Info from session state of SharePoint.aspx and lcoal storage
+export async function getFollowedSites(ctx:ApplicationCustomizerContext):Promise<Array<any>>
+{
+    let followedSites = [];
+    if(localStorage["followedSites"] != undefined)
+    {
+        return JSON.parse(localStorage["followedSites"]).data;
+    }
+
+    await ctx.spHttpClient.get("https://itadev.sharepoint.com/_api/social.following/my/followed(types=4)",SPHttpClient.configurations.v1,{}).then(async(response)=>{
+        await response.json().then(async(data)=>{
+            console.log("Followed Sites Array ", data);
+            data.value.map((item,index)=>{                
+                followedSites.push({title:item.Name,link:item.Uri});                                
+            })
+        })
+    })
+    var jFollowedSites = {"data":followedSites,"expires":moment().add(2,'m')}
+    localStorage["followedSites"] = JSON.stringify(jFollowedSites);
+    return followedSites;
 }

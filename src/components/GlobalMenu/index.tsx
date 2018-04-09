@@ -31,7 +31,7 @@ class GlobalMenu extends React.Component<GlobalMenuProps, GlobalMenuState> {
 
         console.log("FavoriteFeed : ",sessionStorage["ms-oil-datasource-FavoriteFeed"]);
         var favoriteFeed = JSON.parse(sessionStorage["ms-oil-datasource-FavoriteFeed"]);
-        var favoriteFeedData = favoriteFeed[Object.keys(favoriteFeed)[0]];
+        var favoriteFeedData = favoriteFeed[Object.keys(favoriteFeed)[0]]._value;
         console.log(favoriteFeedData);
 
        var globalNavigationLoggedInUser  = {"recentSites":recentSitesData,"suggestedSites": suggestedSitesData,"favoriteFeed":favoriteFeedData};
@@ -39,8 +39,9 @@ class GlobalMenu extends React.Component<GlobalMenuProps, GlobalMenuState> {
         //Use below instead since it provides more information related to user
         
         var _spHomePageDataCache = target.contentWindow._spHomePageDataCache; // Global window object retrieved from Layouts/Sharepoint.aspx page
+        var _spHomeServiceContext = target.contentWindow._spHomeServiceContext;
         var expires = moment().add(45,'m');
-        var cacheData = {"data":_spHomePageDataCache,"expires": expires};
+        var cacheData = {"data":_spHomePageDataCache,"expires": expires,"_spHomeServiceContext":_spHomeServiceContext, "favoriteFeedData":favoriteFeedData};
         localStorage["globalNavigationLoggedInUser"] =JSON.stringify(cacheData);
         
         console.log("_spHomePageDataCache", JSON.parse(localStorage["globalNavigationLoggedInUser"]));
