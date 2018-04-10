@@ -19,14 +19,16 @@ export async function getTeamSites(ctx:ApplicationCustomizerContext):Promise<Arr
 {
     let teamSitesArray = [];
     await ctx.spHttpClient.get("https://itadev.sharepoint.com/sites/teams/_api/web/webinfos",SPHttpClient.configurations.v1,{}).then(async(response)=>{
+        if(response.status == 200)
+        {
         await response.json().then(async(data)=>{
             console.log("Team Sites Array ", data.value);
             data.value.map((item,index)=>{                
                 teamSitesArray.push({title:item.Title,link:item.ServerRelativeUrl});
             })
         })
+        }
     })
-
     return teamSitesArray;
 
 }
